@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getAIResponse } from "../api";
+import { getAIResponse } from "../api.js";
 
 export default function AIChat({ data }) {
   const [messages, setMessages] = useState([
