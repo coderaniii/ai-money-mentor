@@ -3,20 +3,23 @@ import Form from "./pages/Form";
 import Dashboard from "./pages/Dashboard";
 import "./App.css";
 
-function App() {
+export default function App() {
   const [data, setData] = useState(null);
+  const [start, setStart] = useState(false);
 
-  return (
-    <div className="app">
-      <h1 className="title">AI Money Mentor 💸</h1>
+  if (!start) {
+    return (
+      <div className="hero">
+        <h1>AI Money Mentor 💸</h1>
+        <p>Smart AI-powered financial planning</p>
 
-      {!data ? (
-        <Form setData={setData} />
-      ) : (
-        <Dashboard data={data} />
-      )}
-    </div>
-  );
+        <button className="cta" onClick={() => setStart(true)}>
+          🚀 Plan Your Expenses
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) return <Form setData={setData} />;
+  return <Dashboard data={data} setData={setData} />;
 }
-
-export default App;

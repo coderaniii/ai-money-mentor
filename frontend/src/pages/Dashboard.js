@@ -1,68 +1,46 @@
-import React from "react";
-import {
-  Chart as ChartJS,
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-} from "chart.js";
 import { Line } from "react-chartjs-2";
 
-ChartJS.register(
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  CategoryScale
-);
-
-export default function Dashboard({ data }) {
-  if (!data) return null;
-
-  // ✅ define variables (THIS WAS MISSING)
+export default function Dashboard({ data, setData }) {
   const savings = data.salary - data.expenses;
-  const score = Math.min(100, (savings / data.salary) * 100);
+  const score = (savings / data.salary) * 100;
 
-  const months = [
-    "Jan","Feb","Mar","Apr","May","Jun",
-    "Jul","Aug","Sep","Oct","Nov","Dec"
-  ];
-
-  let total = 0;
-  const growth = months.map(() => {
-    total += savings;
-    return total;
-  });
+  let advice = "";
+  if (score < 20) advice = "⚠️ Reduce expenses immediately!";
+  else if (score < 50) advice = "👍 Good, but can improve.";
+  else advice = "🔥 Excellent! Start investing.";
 
   const chartData = {
-    labels: months,
+    labels: ["Salary", "Expenses", "Savings"],
     datasets: [
       {
-        label: "Savings Growth",
-        data: growth,
-        borderColor: "green",
+        label: "Finance",
+        data: [data.salary, data.expenses, savings],
+        borderColor: "#2ecc71",
+        backgroundColor: "rgba(46,204,113,0.2)",
+        tension: 0.4,
       },
     ],
   };
 
   return (
-    <div className="card">
-      <h2>Dashboard 📊</h2>
+    <div className="container">
+      <div className="card big">
+        <h2>Dashboard 📊</h2>
 
-      <p><b>Salary:</b> ₹{data.salary}</p>
-      <p><b>Expenses:</b> ₹{data.expenses}</p>
-      <p><b>Savings:</b> ₹{savings}</p>
+        <div className="stats">
+          <p>💰 Salary: ₹{data.salary}</p>
+          <p>💸 Expenses: ₹{data.expenses}</p>
+          <p>💵 Savings: ₹{savings}</p>
+        </div>
 
-      <h3>Money Health Score: {score.toFixed(0)}/100</h3>
+        <h3>Score: {score.toFixed(0)}/100</h3>
 
-      <div style={{ marginTop: "20px" }}>
+        <div className="insight">{advice}</div>
+
         <Line data={chartData} />
-      </div>
 
-      <button onClick={() => window.location.reload()}>
-        Reset
-      </button>
+        <button onClick={() => setData(null)}>Reset</button>
+      </div>
     </div>
   );
 }
