@@ -9,6 +9,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
+app.get("/api", (req, res) => {
+  res.send("API is working 🚀");
+});
 
 app.post("/api/ai", (req, res) => {
   const { message } = req.body;
@@ -18,7 +21,7 @@ app.post("/api/ai", (req, res) => {
   });
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
